@@ -9,9 +9,15 @@ import NavCars from './shared/navCars';
 import User from './components/users/User';
 import Login from './components/users/Login';
 import Logout from './components/users/Logout';
-
+import getRespose from './components/users/checkData';
 function App() {
   const [objAuth, setAuthenticated] = useState({ authenticated: false });
+  const [show, setShow] = useState(false);
+  const [responseText, setResponse_text] = useState('');
+  useEffect(() => {
+    setResponse_text(checkData.getRespose());
+    setShow(responseText!==null);
+  });
   const handleCallback = (authValue) => {
     setAuthenticated({ authenticated: authValue });
   };
@@ -30,6 +36,14 @@ function App() {
             <Route path="/users/:userId/cars/delete" element={<DeleteCar />} />
             <Route path="/users/:userId/cars/:carId" element={<Car />} />
           </Routes>
+          <ToastContainer className="p-3" position="middle-center">
+            <Toast className="d-inline-block m-1" bg="info" onClose={() => setShow(false)} show={show} delay={3000} autohide>
+              <Toast.Header>
+              <strong className="me-auto">Cars App</strong>
+              </Toast.Header>
+              <Toast.Body className={'Info' === 'Dark' && 'text-white'}>{responseText}</Toast.Body>
+            </Toast>
+          </ToastContainer>
         </div>
       </>
     </div>

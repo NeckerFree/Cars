@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import {
+  Button,
+  Form,
+  Toast,
+  ToastContainer,
+} from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -7,6 +12,7 @@ import { loginUser, getUser } from '../../redux/users/user';
 
 function Login({ handleClick }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -16,6 +22,7 @@ function Login({ handleClick }) {
     dispatch(getUser(formDataObj.email));
     setIsSubmitted(true);
     handleClick(true);
+    setShow(true);
   };
 
   const renderForm = (
@@ -44,7 +51,23 @@ function Login({ handleClick }) {
     <div className="user-container" data-testid="user-a">
       <div className="app">
         <div className="login-form">
-          { isSubmitted ? <div> Welcome to Cars App! </div> : renderForm }
+          {
+            isSubmitted === true
+              ? (
+                <div>
+                  <div> Welcome to Cars App! </div>
+                  <ToastContainer className="p-3" position="middle-center">
+                    <Toast className="d-inline-block m-1" bg="info" onClose={() => setShow(false)} show={show} delay={3000} autohide>
+                      <Toast.Header>
+                        <strong className="me-auto">Cars App</strong>
+                      </Toast.Header>
+                      <Toast.Body className={'Info' === 'Dark' && 'text-white'}>You are logged In</Toast.Body>
+                    </Toast>
+                  </ToastContainer>
+                </div>
+              )
+              : renderForm
+          }
         </div>
       </div>
     </div>

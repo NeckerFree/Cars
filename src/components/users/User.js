@@ -1,11 +1,17 @@
-import React from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useState } from 'react';
+import {
+  Button,
+  Form,
+  Toast,
+  ToastContainer,
+} from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 // import axios from 'axios';
 import { createUser } from '../../redux/users/user';
 
 const User = () => {
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,7 +25,10 @@ const User = () => {
       formDataObj.age,
       formDataObj.phone,
     ));
-    window.location.href = '/';
+    setShow(true);
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
   };
   return (
     <div className="user-container" data-testid="user-a">
@@ -61,6 +70,14 @@ const User = () => {
           <NavLink to="/" className="link">Log in</NavLink>
         </Form.Group>
       </Form>
+      <ToastContainer className="p-3" position="middle-center">
+        <Toast className="d-inline-block m-1" bg="info" onClose={() => setShow(false)} show={show} delay={3000} autohide>
+          <Toast.Header>
+            <strong className="me-auto">Cars App</strong>
+          </Toast.Header>
+          <Toast.Body className={'Info' === 'Dark' && 'text-white'}>User Created!</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };
